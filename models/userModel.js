@@ -35,10 +35,6 @@ const UserSchema = new mongoose.Schema({
     updatedAt: {
         type: Date,
     },
-    profile_image: {
-        type: String,
-        default: "default.jpg"
-    },
     blocked: {                                                      //admin isterse bazi kullanicilarin hesaplarini bloke edebilir.
         type: Boolean,
         default: false,

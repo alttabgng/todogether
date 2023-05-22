@@ -76,23 +76,7 @@ const getAllUsers = asyncErrorWrapper(async (req, res, next) => {
 });
 
 
-//bu fonksiyon ile kullanıcı resim yükleyebilir.
-const imageUpload = asyncErrorWrapper(async (req, res, next) => {
-
-    const user = await User.findByIdAndUpdate(req.user.id, {           //kullanici id'si ile kullanici bilgileri guncellenir.
-    "profile_image": req.savedProfileImage
-}, {
-    new: true,
-    runValidators: true                                                 //guncelleme isleminde validasyonlari calistirir.
-});
-
-res.status(200).json({
-    success: true,
-    message: "Image Upload Successfull",
-    data: user,                                                         //guncellenmis kullanici bilgileri dondurulur.
-})
-});
 
 
 
-module.exports = {createUser, deleteUser, updateUser, getAllUsers, getSingleUser, imageUpload }
+module.exports = {createUser, deleteUser, updateUser, getAllUsers, getSingleUser, }

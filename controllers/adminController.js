@@ -18,17 +18,6 @@ const blockUser = asyncErrorWrapper(async (req, res, next) => {
 });
 
 
-//Admin isterse kullaniciyi silebilir.
-const deleteUser = asyncErrorWrapper(async(req, res, next) => {
-
-    const {id} = req.params;
-    const user = await User.findByIdAndDelete(id);
 
 
-    return res.status(200).json({
-        success: true,
-        message: "Delete Operation Successful"
-    });
-});
-
-module.exports = { blockUser, deleteUser, }
+module.exports = { blockUser, }

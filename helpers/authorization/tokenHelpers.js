@@ -6,7 +6,7 @@ const sendJwtToClient = (user, res) => {
     return res
         .status(200)
         .cookie("access_token", token, {                                        //token cookie olarak gonderildi.
-            httpOnly: true,                                                     //httpOnly ile cookie'nin sadece http protokolü ile gonderilecegi belirlendi.
+            httpOnly: true,
             expires: new Date(Date.now() + parseInt(JWT_COOKIE) * 1000 * 60),   //expires ile tokenin ne kadar sure boyunca gecerli olacagi belirlendi.(10 dakika)
             secure: NODE_ENV === "development" ? false : true,                  //secure ile cookie'nin sadece https ile gonderilecegi belirlendi.
         })
@@ -23,7 +23,7 @@ const sendJwtToClient = (user, res) => {
 //Bu fonksiyon ile tokenin dogru formatta gonderilip gonderilmedigi kontrol edildi.
 const isTokenIncluded = (req) => {
     return (
-        req.headers.authorization && req.headers.authorization.startsWith("Bearer:")    // dogru formatta token gonderildi mi kontrol edildi.
+        req.headers.authorization && req.headers.authorization.startsWith("Bearer:")
     );
 };
 
