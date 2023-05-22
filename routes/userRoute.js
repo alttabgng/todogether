@@ -1,0 +1,17 @@
+const express = require("express");
+const { createUser, deleteUser, updateUser, getAllUsers, getSingleUser, imageUpload } = require("../controllers/userController.js");
+const { checkUserExist } = require("../middlewares/database/databaseErrorHelpers.js");
+const { getAccessToRoute, getAdminAccess } = require("../middlewares/authorization/auth.js");
+
+const router = express.Router();
+
+router.post("/", createUser);
+router.get("/", getAllUsers);
+router.get("/:id", checkUserExist, getSingleUser);
+router.put("/:id", checkUserExist, updateUser);
+router.delete("/:id", checkUserExist, deleteUser);
+
+router.post("/upload", imageUpload);
+
+
+module.exports = router;
