@@ -3,9 +3,10 @@ const { createUser, deleteUser, updateUser, getAllUsers, getSingleUser } = requi
 const { checkUserExist } = require("../middlewares/database/databaseErrorHelpers.js");
 const { getAccessToRoute, getAdminAccess } = require("../middlewares/authorization/auth.js");
 
+
 const router = express.Router();
 
-router.post("/", createUser);
+router.post("/create", createUser);
 router.get("/", getAllUsers);
 router.get("/:id", checkUserExist, getSingleUser);
 router.put("/:id", checkUserExist, updateUser);

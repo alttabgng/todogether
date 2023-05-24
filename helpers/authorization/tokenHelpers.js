@@ -16,6 +16,7 @@ const sendJwtToClient = (user, res) => {
             data: {
                 name: user.name,
                 email: user.email,
+                _id : user._id,
             },
         });
 };

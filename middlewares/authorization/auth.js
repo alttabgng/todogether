@@ -1,6 +1,7 @@
 const CustomError = require("../../helpers/error/CustomError");
 const asyncErrorWrapper = require("express-async-handler");
 const User = require("../../models/userModel");
+const Group = require("../../models/groupModel");
 const jwt = require("jsonwebtoken");
 const { isTokenIncluded, getAccessTokenFromHeader } = require("../../helpers/authorization/tokenHelpers");
 

@@ -1,20 +1,24 @@
 const User = require("../models/userModel");
+const Group = require("../models/groupModel");
+const Task = require("../models/taskModel");
 const CustomError = require("../helpers/error/CustomError");
 const asyncErrorWrapper = require("express-async-handler");
+const {sendJwtToClient} = require("../helpers/authorization/tokenHelpers");
 
 
 const createUser = asyncErrorWrapper(async (req, res, next) => {
 
-    const {name, email, password, role} = req.body;
+    const {name, email, password, role, groupId} = req.body;
 
     const user = await User.create({
         name,
         email,
         password,
-        role
+        role,
+        groupId
     });
 
-    sendJwtToClient (user, res);                //kullanici olusturuldugunda otomatik olarak token olusturulur ve kullaniciya gonderilir.
+    sendJwtToClient(user, res);                //kullanici olusturuldugunda otomatik olarak token olusturulur ve kullaniciya gonderilir.
 
 });
 
@@ -74,8 +78,6 @@ const getAllUsers = asyncErrorWrapper(async (req, res, next) => {
         data: users
 });
 });
-
-
 
 
 

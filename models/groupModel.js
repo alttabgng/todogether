@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken")
+
 
 const GroupSchema = new mongoose.Schema({
 
@@ -19,10 +21,21 @@ const GroupSchema = new mongoose.Schema({
             default: "user",
         },
         }],
-    createdAt: {
-    type: Date,
-    default: Date.now,
-    },
-});
+        tasks: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Task",
+        }],
+        user: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        }],
+        createdAt: {
+        type: Date,
+        default: Date.now,
+        },
+        updatedAt: {
+        type: Date,
+        },
+    });
 
 module.exports = mongoose.model("Group", GroupSchema);

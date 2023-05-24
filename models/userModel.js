@@ -45,6 +45,16 @@ const UserSchema = new mongoose.Schema({
     resetPasswordExpire: {
         type: Date,
     },
+    groups: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Group",
+    },
+],
+    tasks: [{                                    // Kullanıcının görevleri için bir dizi eklendi
+        type: mongoose.Schema.ObjectId,
+        ref: "Task",
+    }],
+
 });
 
 // UserSchema methods

@@ -1,14 +1,21 @@
 const Group = require("../models/groupModel");
+const User = require("../models/userModel");
+const Task = require("../models/taskModel");
 const CustomError = require("../helpers/error/CustomError");
 const asyncErrorWrapper = require("express-async-handler");
+const { sendJwtToClient } = require("../helpers/authorization/tokenHelpers");
+
 
 // Yeni bir grup oluşturma
 const createGroup = asyncErrorWrapper(async (req, res, next) => {
-  const { name, description } = req.body;
+  const { name, members, roles } = req.body;
 
   const group = await Group.create({
     name,
-    description,
+    members: members.map((member, index) => ({
+      user: member,
+      role: roles[index] || "user",
+    })),
   });
 
   return res.status(201).json({
@@ -16,6 +23,41 @@ const createGroup = asyncErrorWrapper(async (req, res, next) => {
     data: group,
   });
 });
+
+
+
+// Grubu silme
+const deleteGroup = asyncErrorWrapper(async (req, res, next) => {
+  const { groupId } = req.params;
+  const { user } = req; // Oturum açmış kullanıcının bilgileri
+
+  let group;
+  try {
+    group = await Group.findByIdAndDelete(groupId);
+  } catch (err) {
+    return next(new CustomError("An error occurred while deleting the group", 500));
+  }
+
+  if (!group) {
+    return next(new CustomError("Group not found", 404));
+  }
+
+  // Grubu oluşturan kişi veya admin rolüne sahip kullanıcıların grupları silebilmesini kontrol et
+  if (
+    (group.createdBy && group.createdBy.toString() !== user.id) &&
+    (!user.roles || !user.roles.includes("admin"))
+  ) {
+    return next(new CustomError("You are not authorized to delete this group", 403));
+  }
+
+
+  return res.status(200).json({
+    success: true,
+    message: "Group deleted successfully",
+  });
+});
+
+
 
 // Tüm grupları getirme
 const getAllGroups = asyncErrorWrapper(async (req, res, next) => {
@@ -53,7 +95,6 @@ const addUserToGroup = asyncErrorWrapper(async (req, res, next) => {
     return next(new CustomError("Group not found", 404));
   }
 
-  // Kullanıcının zaten grupta olup olmadığını kontrol etme
   const isUserInGroup = group.members.some(
     (member) => member.user.toString() === userId
   );
@@ -70,6 +111,8 @@ const addUserToGroup = asyncErrorWrapper(async (req, res, next) => {
     message: "User added to the group successfully",
   });
 });
+
+
 
 // Bir kullanıcıyı gruptan çıkarma
 const removeUserFromGroup = asyncErrorWrapper(async (req, res, next) => {
@@ -103,6 +146,7 @@ return res.status(200).json({
 
 module.exports = {
     createGroup,
+    deleteGroup,
     getAllGroups,
     getGroup,
     addUserToGroup,
